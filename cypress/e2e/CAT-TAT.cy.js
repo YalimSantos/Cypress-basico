@@ -4,8 +4,12 @@ describe('Central de atendimento ao cliente TAT', () => {
   beforeEach('Visitando a página', () => {
     cy.visit('./src/index.html')
   })
-  it('Verifica o título da aplicação', () => {
-    cy.title().should('equal', 'Central de Atendimento ao Cliente TAT')
+
+  // Executa o teste 3 vezes
+  Cypress._.times(3, () => {
+    it('Verifica o título da aplicação', () => {
+      cy.title().should('equal', 'Central de Atendimento ao Cliente TAT')
+    })
   })
 
   it('Preenche os campos obrigatórios e envia o formulário', () => {
@@ -17,12 +21,19 @@ describe('Central de atendimento ao cliente TAT', () => {
     'abc, abc, abc, abc, abc, abc, abc, abc, abc, abc, abc, abc, abc, abc, abc, abc, abc, abc, ' +
     'abc,'
 
+    cy.clock()
+
     cy.get('#firstName').type('Yalim')
     cy.get('#lastName').type('Santos')
     cy.get('#email').type('yalim@gmail.com')
     cy.get('#open-text-area').type(longText, { delay: 0 })
     cy.get('button[type="submit"]').click()
+
     cy.get('.success').should('be.visible')
+
+    cy.tick(3000)
+
+    cy.get('.success').should('not.be.visible')
   })
 
   it('Exibe mensagem de erro ao digitar email com formatação incorreta', () => {
@@ -134,4 +145,27 @@ describe('Central de atendimento ao cliente TAT', () => {
 
     cy.url().should('contain', 'privacy.html')
   }) 
+
+  it('Exibe e esconde a mensagem de sucesso', () => {
+    cy.get('.success').should('not.be.visible')
+      .invoke('show').should('be.visible')
+      .invoke('hide').should('not.be.visible')
+  })
+
+  it('Preenche a área de texto usando invoke val', () => {
+    // Cria uma string com esses valores repetidos 20 vezes
+    const longText = Cypress._.repeat('0123456789', 20)
+
+    cy.get('#open-text-area').invoke('val', longText)
+      .should('have.value', longText)
+  })
+
+  it('Faz uma requisição HTTP', () => {
+    cy.request('https://cac-tat.s3.eu-central-1.amazonaws.com/index.html')
+      .should((res) => {
+        expect(res.status).to.be.equal(200)
+        expect(res.statusText).to.be.equal('OK')
+        expect(res.body).to.include('CAC TAT')
+      })
+  })
 })
