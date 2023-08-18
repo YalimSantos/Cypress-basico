@@ -1,0 +1,25 @@
+{
+  "name": "cypress-basico",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx cypress run",
+    "test:mobile": "npx cypress run --config viewportWidth=410 viewportHeight=860",
+    "open:mobile": "cypress open --config viewportWidth=410 viewportHeight=860",
+    "open": "npx cypress open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YalimSantos/Cypress-basico.git"
+  },
+  "author": "Yalim Santos",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/YalimSantos/Cypress-basico/issues"
+  },
+  "homepage": "https://github.com/YalimSantos/Cypress-basico#readme",
+  "devDependencies": {
+    "cypress": "^12.17.3"
+  }
+}
